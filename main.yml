@@ -1,0 +1,7 @@
+
+- name : apply docker to all
+  hosts: client
+ 
+  roles: 
+        - prepare
+        - jenkins

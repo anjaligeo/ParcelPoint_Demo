@@ -1,0 +1,23 @@
+
+- name: Deploy Jenkins Docker image
+  shell: docker run -p 8080:8080 -p 50000:50000 jenkins
+
+- name: Wait for Jenkins starts
+  wait_for:
+    port: 8080
+    delay: 10
+ 
+
+- name: Get initial admin password
+  shell: docker run --rm --volumes-from={{ jenkins_master_container_name }} jenkins cat /var/jenkins_home/secrets/initialAdminPassword
+  register: admin_password
+  when: jenkins_container.stdout.find('{{ jenkins_master_container_name }}') == -1
+
+- name: Print initial admin password
+  debug: msg="Initial admin password {{ admin_password.stdout }}"
+  when: jenkins_container.stdout.find('{{ jenkins_master_container_name }}') == -1
+
+
+
+
+
